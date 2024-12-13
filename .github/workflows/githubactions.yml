@@ -16,7 +16,7 @@ jobs:
     steps:
     - name: set ROLE
       run: |
-        echo "AWS_ROLE_ARN=$" >> $GITHUB_ENV
+        echo "AWS_ROLE_ARN=${{secrets.AWS_ROLE_ARN}}" >> $GITHUB_ENV
 
     - name: Checkout
       uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
     - name: cofigure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-       role-to-assume: $
+       role-to-assume: ${{secrets.AWS_ROLE_ARN}}
        aws-region: ap-northeast-1
 
     - name: Setup Terraform
