@@ -39,7 +39,6 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve
       working-directory: terraform
-
 ---
 name: Manual Workflow
 
