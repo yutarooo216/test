@@ -1,13 +1,16 @@
-name: 'GithubActions-Terraform'
+name: Manual Workflow
 
 on:
-  push:
-    branches:
-      - "main"
+  workflow_dispatch:  # 手動トリガーイベント
+    inputs:
+      confirm_destroy:
+        description: 'Are you sure you want to destroy the resources?'
+        required: true
+        default: 'no'
 
 jobs:
-  apply-tf:
-    name: Terraform apply
+  destroy-tf:
+    name: Terraform destroy
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -17,15 +20,14 @@ jobs:
     - name: set ROLE
       run: |
         echo "AWS_ROLE_ARN=${{secrets.AWS_ROLE_ARN}}" >> $GITHUB_ENV
-
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: cofigure AWS credentials
+    - name: configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-       role-to-assume: ${{secrets.AWS_ROLE_ARN}}
-       aws-region: ap-northeast-1
+        role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+        aws-region: ap-northeast-1
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
@@ -36,6 +38,7 @@ jobs:
       run: terraform init
       working-directory: terraform
 
-    - name: Terraform Apply
-      run: terraform apply -auto-approve
+    - name: Terraform Destroy
+      run: terraform destroy -auto-approve
       working-directory: terraform
+      if: ${{ github.event.inputs.confirm_destroy == 'yes' }}  # 入力が "yes" の場合のみ実行
