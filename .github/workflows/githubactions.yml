@@ -41,7 +41,6 @@ jobs:
       working-directory: terraform
 
 ---
-
 name: Manual Workflow
 
 on:
