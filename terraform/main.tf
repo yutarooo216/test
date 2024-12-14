@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "cicd-bucket-yutarooo216"
-    key = "test/resouces"
+    key = "test/resorces"
     region = "ap-northeast-1"
     encrypt = true
   }
